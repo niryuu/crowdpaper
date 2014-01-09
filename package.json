@@ -1,0 +1,18 @@
+{
+  "name": "koa-test",
+  "description": "Koa test app",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "koa": "*",
+    "koa-pg": "*",
+    "koa-sess": "*",
+    "koa-router": "*",
+    "koa-static": "*",
+    "koa-render": "*",
+    "ejs": "*"
+  }
+}
