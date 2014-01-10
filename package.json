@@ -16,6 +16,7 @@
     "koa-render": "*",
     "ejs": "*",
     "co-body": "*",
+    "co-busboy": "*",
     "path-to-regexp": "*"
   }
 }

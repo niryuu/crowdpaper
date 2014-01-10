@@ -1,7 +1,9 @@
 var parse = require('co-body')
+var parse_multipart = require('co-busboy')
+var fs = require('fs')
 var UserService = require('../service/user')
 var ProjectService = require('../service/project')
-//var DataService = require('../service/data')
+var PhotoService = require('../service/photo')
 module.exports = function (app){
   app.get('/', function *(next){
     this.body = yield this.render('index.ejs', {role: this.role})
@@ -68,11 +70,13 @@ module.exports = function (app){
     this.body = yield this.render('project_edit.ejs', {role: this.role, project: project})
   })
   app.post('/project/photoupload/:project_id', function *(next) {
-    var parts = parse(this);
+    var photo_id = yield PhotoService.new(this.pg.db.client, this.params.project_id)
+    var parts = parse_multipart(this);
     var part;
     while (part = yield parts) {
-      var stream = fs.createWriteStream(__dirname + '/static/photo/' + Math.random());
-      console.log(part)
+      var ext = part.filename.split('.')[1]
+      var stream = fs.createWriteStream('./static/photo/' + photo_id + '.' + ext);
+      yield PhotoService.updateUrl(this.pg.db.client, photo_id, '/photo/' + photo_id + '.' + ext)
       part.pipe(stream);
     }
     this.body = '{status: "OK"}'
