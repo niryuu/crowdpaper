@@ -23,7 +23,7 @@ CREATE TABLE manager.data (
   id serial primary key,
   photo_id integer references manager.photo(id) ON DELETE CASCADE,
   project_id integer references manager.project(id) ON DELETE CASCADE,
-  row hstore
+  row text[]
 );
 CREATE TABLE manager.user_project (
   user_id integer references manager.user(id) ON DELETE CASCADE,

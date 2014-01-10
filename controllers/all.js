@@ -1,6 +1,6 @@
 var parse = require('co-body')
 var UserService = require('../service/user')
-//var ProjectService = require('../service/project')
+var ProjectService = require('../service/project')
 //var DataService = require('../service/data')
 module.exports = function (app){
   app.get('/', function *(next){
@@ -32,7 +32,7 @@ module.exports = function (app){
     if(!postData.username) this.throw(400, 'username required')
     if(!postData.password) this.throw(400, 'pasword required')
     try {
-      var result = yield *UserService.auth(this.pg.db.client, postData.username, postData.password)
+      var result = yield UserService.auth(this.pg.db.client, postData.username, postData.password)
       if(result) {
         this.session.user_id = result.id
         this.session.role = result.role
@@ -58,11 +58,16 @@ module.exports = function (app){
     yield next
   })
   app.post('/project/new', function *(next){
-    this.body = yield this.render('project.ejs', {role: this.role})
+    var postData = yield parse(this)
+    if(!postData.title) this.throw(400, 'title required')
+    if(!postData.cols) this.throw(400, 'some column required')
+    var result = yield ProjectService.new(this.pg.db.client, this.session.user_id, postData.title, postData.description, postData.cols)
+    this.redirect('/project/view/' + result)
     yield next
   })
   app.get('/project/view/:id', function *(next){
-    this.body = yield this.render('project.ejs', {role: this.role})
+    var project = yield ProjectService.fetchOne(this.pg.db.client, this.params.id)
+    this.body = yield this.render('project.ejs', {role: this.role, project: project})
     yield next
   })
   app.get('/edit/:id', function *(next){
