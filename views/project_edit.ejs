@@ -1,0 +1,69 @@
+<% include header.ejs %>
+<div class="jumbotron" id="fileupload">
+  <h1><%= project.title %></h1>
+  <h2>こちらにファイルをドラッグ・アンド・ドロップすると、画像をアップロードできます</h2>
+  <form role="form" action="/project/new" method="POST">
+    <div class="form-group">
+      <label for="title">タイトル</label>
+      <input type="text" class="form-control" name="title" value="<%= project.title %>">
+    </div>
+    <div class="form-group">
+      <label for="description">説明</label>
+      <textarea class="form-control" name="description" rows="10"><%= project.description %></textarea>
+      <p class="help-block">ライセンスなどもこちらに入力して下さい。</p>
+    </div>
+    <div class="form-group">
+      <p>入力項目は修正できません。</p>
+    </div>
+    <button type="submit" class="btn btn-default">送信</button>
+  </form>
+</div>
+<div id="progress" class="progress">
+  <div class="progress-bar progress-bar-success"></div>
+</div>
+  <!-- The container for the uploaded files -->
+  <div id="files" class="files"></div>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/bootstrap/js/jquery.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+  
+<!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+<script src="/js/jquery.ui.widget.js"></script>
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script src="/js/jquery.iframe-transport.js"></script>
+<!-- The basic File Upload plugin -->
+<script src="/js/jquery.fileupload.js"></script>
+<!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
+<script>
+/*jslint unparam: true */
+/*global window, $ */
+$(function () {
+    'use strict';
+    // Change this to the location of your server-side upload handler:
+    var url = '/project/photoupload/<%= project.id %>'
+    $('#fileupload').fileupload({
+        url: url,
+        dataType: 'json',
+        done: function (e, data) {
+            $.each(data.result.files, function (index, file) {
+                $('<p/>').text(file.name).appendTo('#files');
+            });
+        },
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress .progress-bar').css(
+                'width',
+                progress + '%'
+            );
+        }
+    }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+});
+</script>
+
+</body></html>

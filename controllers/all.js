@@ -63,6 +63,20 @@ module.exports = function (app){
     this.body = yield this.render('project_new.ejs', {role: this.role})
     yield next
   })
+  app.get('/project/edit/:project_id', function *(next) {
+    var project = yield ProjectService.fetchOne(this.pg.db.client, this.params.project_id)
+    this.body = yield this.render('project_edit.ejs', {role: this.role, project: project})
+  })
+  app.post('/project/photoupload/:project_id', function *(next) {
+    var parts = parse(this);
+    var part;
+    while (part = yield parts) {
+      var stream = fs.createWriteStream(__dirname + '/static/photo/' + Math.random());
+      console.log(part)
+      part.pipe(stream);
+    }
+    this.body = '{status: "OK"}'
+  })
   app.post('/project/new', function *(next){
     var postData = yield parse(this)
     if(!postData.title) this.throw(400, 'title required')
