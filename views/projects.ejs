@@ -1,0 +1,17 @@
+<% include header.ejs %>
+<div class="row jumbotron">
+  <h1>プロジェクト一覧</h1>
+</div>
+<div class="row">
+  <% for(var i in projects) { %>
+  <div class="col-sm-4 col-md-4">
+    <div class="thumbnail">
+      <a href="/project/view/<%= projects[i].id %>">
+        <h2><%= projects[i].title %></h2>
+        <p><%= projects[i].description %></p>
+      </a>
+    </div>
+  </div>
+  <% } %>
+</div>
+<% include footer.ejs %>

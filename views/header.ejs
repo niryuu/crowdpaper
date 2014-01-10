@@ -36,14 +36,14 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li><a href="/project">プロジェクトの一覧</a></li>
-            <li><a href="/project/new">新規プロジェクト</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="/admin">プロジェクトを管理</a></li>
             <% if(role === 'guest') { %>
               <li><a href="/signup">ユーザー登録</a></li>
               <li><a href="/login">ログイン</a></li>
             <% } else { %>
+              <li><a href="/project/new">新規プロジェクト</a></li>
+              <li><a href="/project/my">プロジェクトを管理</a></li>
               <li><a href="/logout">ログアウト</a></li>
             <% } %>
           </ul>

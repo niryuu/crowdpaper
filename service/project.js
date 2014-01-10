@@ -24,5 +24,17 @@ var ProjectService = function() {
     })
     return result.rows[0]
   }
+  this.fetchByUser = function *(client, user_id) {
+    var result = yield client.query_({
+      name: 'projectfetchone',
+      text: 'SELECT * FROM manager.project WHERE user_id = $1',
+      values: [user_id]
+    })
+    return result.rows
+  }
+  this.fetchAll = function *(client, opt) {
+    var result = yield client.query_('SELECT * FROM manager.project;')
+    return result.rows
+  }
 }
 module.exports = new ProjectService()

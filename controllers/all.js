@@ -50,7 +50,13 @@ module.exports = function (app){
     yield next
   })
   app.get('/project', function *(next){
-    this.body = yield this.render('projects.ejs', {role: this.role})
+    var projects = yield ProjectService.fetchAll(this.pg.db.client)
+    this.body = yield this.render('projects.ejs', {role: this.role, projects: projects})
+    yield next
+  })
+  app.get('/project/my', function *(next){
+    var projects = yield ProjectService.fetchByUser(this.pg.db.client, this.session.user_id)
+    this.body = yield this.render('project_my.ejs', {role: this.role, projects: projects})
     yield next
   })
   app.get('/project/new', function *(next){
