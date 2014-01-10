@@ -1,0 +1,8 @@
+<% include header.ejs %>
+      <form class="form-signin" role="form" action="/signup" method="POST">
+        <h2 class="form-signin-heading">ユーザー登録</h2>
+        <input name="username" type="text" class="form-control" placeholder="User Name" required autofocus>
+        <input name="password" type="password" class="form-control" placeholder="Password" required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">登録</button>
+      </form>
+<% include footer.ejs %>
