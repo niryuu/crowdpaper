@@ -12,7 +12,7 @@ CREATE TABLE manager.project (
   user_id integer references manager.user(id) ON DELETE CASCADE,
   title text,
   description text,
-  schema hstore
+  schema text[]
 );
 CREATE TABLE manager.photo (
   id serial primary key,

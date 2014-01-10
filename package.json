@@ -16,6 +16,6 @@
     "koa-render": "*",
     "ejs": "*",
     "co-body": "*",
-    "path-to-regexp": "*",
+    "path-to-regexp": "*"
   }
 }

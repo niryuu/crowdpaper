@@ -17,8 +17,9 @@ app.use(serve(__dirname + '/static'))
 app.use(views('./views'))
 //role setting
 app.use(function *(next) {
-  if(!this.session.role) {
+  if(!this.session || !this.session.role) {
     this.role = 'guest'
+    this.session.role = 'guest'
   }
   else this.role = this.session.role
   yield next
