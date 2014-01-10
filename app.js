@@ -5,7 +5,7 @@ var koa = require('koa')
     ,router = require('koa-router')
     ,serve = require('koa-static')
     ,views = require('koa-render')
-    ,acl = require('./lib/acl')
+    ,pathToRegexp = require('path-to-regexp')
 
 var app = koa()
 app.name = 'lod'
@@ -14,13 +14,27 @@ app.keys = ['hoge', 'hoge']
 app.use(session({store:redisStore()}))
 app.use(koaPg('postgres://postgres:postgres@localhost:5432/lod'))
 app.use(serve(__dirname + '/static'))
-app.use(acl({default: ['guest', 'user']}))
+app.use(views('./views'))
+//role setting
 app.use(function *(next) {
-  if(this.session.role) this.role = this.session.role
-  else this.role = 'guest'
+  if(!this.session.role) {
+    this.role = 'guest'
+  }
+  else this.role = this.session.role
   yield next
 })
-app.use(views('./views'))
+//access control
+app.use(function *(next) {
+  var acls = require('./acl')
+  var granted = false
+  for(var i in acls[this.role]) {
+    if(this.url.match(pathToRegexp(acls[this.role][i], []))) {
+      granted = true
+    }
+  }
+  if(!granted) this.redirect('/')
+  yield next
+})
 app.use(router(app))
 require('./controllers/all')(app)
 

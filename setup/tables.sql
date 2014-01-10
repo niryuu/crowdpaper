@@ -2,8 +2,10 @@ CREATE EXTENSION hstore;
 CREATE SCHEMA manager;
 CREATE TABLE manager.user (
   id serial primary key,
-  username text,
-  password text
+  username text unique,
+  password text,
+  salt text,
+  role text
 );
 CREATE TABLE manager.project (
   id serial primary key,
@@ -22,4 +24,16 @@ CREATE TABLE manager.data (
   photo_id integer references manager.photo(id) ON DELETE CASCADE,
   project_id integer references manager.project(id) ON DELETE CASCADE,
   row hstore
+);
+CREATE TABLE manager.user_project (
+  user_id integer references manager.user(id) ON DELETE CASCADE,
+  project_id integer references manager.project(id) ON DELETE CASCADE
+);
+CREATE TABLE manager.user_data (
+  user_id integer references manager.user(id) ON DELETE CASCADE,
+  data_id integer references manager.data(id) ON DELETE CASCADE
+);
+CREATE TABLE manager.user_photo (
+  user_id integer references manager.user(id) ON DELETE CASCADE,
+  photo_id integer references manager.photo(id) ON DELETE CASCADE
 );

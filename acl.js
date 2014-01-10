@@ -1,6 +1,4 @@
 module.exports = {
-  open: ['guest', 'user', 'admin'],
-  edit: ['user', 'admin'],
-  admin: ['admin']
-  default: ['guest', 'user', 'admin']
+  guest: ['/', '/signup', '/login', '/project', '/project/view/:id'],
+  user: ['/', '/logout', '/project', '/project/view/:id', '/edit/:id', '/project/new']
 }

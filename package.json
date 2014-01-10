@@ -14,6 +14,8 @@
     "koa-router": "*",
     "koa-static": "*",
     "koa-render": "*",
-    "ejs": "*"
+    "ejs": "*",
+    "co-body": "*",
+    "path-to-regexp": "*"
   }
 }
