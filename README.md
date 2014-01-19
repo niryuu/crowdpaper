@@ -6,6 +6,10 @@
 * PostgreSQL 9.1+
 * Redis
 
+## デプロイ方法
+* npm install
+* node app.js
+
 ## FAQ
 * リポジトリ名を見ると、CrowdPaperではないのか。
     * 開発過程でサービス名を忘れることもある。
