@@ -4,11 +4,15 @@ block content
       .col-md-3
         .jumbotron
           ul
+            each photo in photos
+              li
+                a(href='/project/input/#{photo.id}') #{photo.name}
       .col-md-9.jumbotron
         h1
           =project.title
         p
-          =project.description
+          pre
+            =project.description
         h2 データ
         table.table
           th

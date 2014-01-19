@@ -1,9 +1,9 @@
 var PhotoService = function() {
-  this.new = function *(client, project_id, photo_url) {
+  this.new = function *(client, project_id, photo_url, filename) {
     var newResult = yield client.query_({
       name: 'newphoto',
-      text: 'INSERT INTO manager.photo (project_id, photo_url) values ($1, $2)',
-      values: [project_id, photo_url]
+      text: 'INSERT INTO manager.photo (project_id, photo_url, name) values ($1, $2, $3)',
+      values: [project_id, photo_url, filename]
     })
     if(newResult) {
       var photo_id_result = yield client.query_("SELECT currval('manager.photo_id_seq') AS currval;")

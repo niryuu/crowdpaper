@@ -77,7 +77,7 @@ module.exports = function (app){
     while (part = yield parts) {
       var ext = part.filename.split('.')[1]
       var stream = fs.createWriteStream('./static/photo/' + photo_id + '.' + ext);
-      yield PhotoService.updateUrl(this.pg.db.client, photo_id, '/photo/' + photo_id + '.' + ext)
+      yield PhotoService.updateUrl(this.pg.db.client, photo_id, '/photo/' + photo_id + '.' + ext, part.filename)
       part.pipe(stream);
     }
     this.body = '{status: "OK"}'
@@ -92,7 +92,8 @@ module.exports = function (app){
   })
   app.get('/project/view/:id', function *(next){
     var project = yield ProjectService.fetchOne(this.pg.db.client, this.params.id)
-    this.body = yield this.render('project.jade', {role: this.role, project: project})
+    var photos = yield PhotoService.fetchByProject(this.pg.db.client, this.params.id, {})
+    this.body = yield this.render('project.jade', {role: this.role, project: project, photos: photos})
     yield next
   })
   app.get('/edit/:id', function *(next){
