@@ -1,0 +1,52 @@
+extend layout
+block content
+    #fileupload.jumbotron
+      h1
+      h2 こちらにファイルをドラッグ・アンド・ドロップすると、画像をアップロードできます
+      p アップロード状況
+      #progress.progress
+        .progress-bar.progress-bar-success
+      form(role='form', action='/project/new', method='POST')
+        .form-group
+          label(for='title') タイトル
+          input.form-control(type='text', name='title', value='#{project.title}')
+        .form-group
+          label(for='description') 説明
+          textarea.form-control(name='description', rows='10') #{project.description}
+          p.help-block ライセンスなどもこちらに入力して下さい。
+        .form-group
+          p 入力項目は修正できません。
+        button.btn.btn-default(type='submit') 送信
+    // The container for the uploaded files
+    #files.files
+    .row.jumbotron
+      h1 画像一覧
+      each photo in photos
+        .col-sm-4.col-md-4.thumbnail
+          img(src='#{photo.photo_url}')
+block append script
+    script(src='/js/jquery.ui.widget.js')
+    script(src='/js/jquery.iframe-transport.js')
+    script(src='/js/jquery.fileupload.js')
+    script.
+      $(function () {
+        'use strict';
+        var url = '/project/photoupload/#{project.id}'
+        $('#fileupload').fileupload({
+          url: url,
+          dataType: 'json',
+          done: function (e, data) {
+            $.each(data.result.files, function (index, file) {
+              $('<p/>').text(file.name).appendTo('#files')
+            });
+          },
+          progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress .progress-bar').css(
+              'width',
+              progress + '%'
+            );
+          }
+        }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+      });

@@ -1,0 +1,17 @@
+extend layout
+block content
+    .row
+      .col-md-3
+        .jumbotron
+          ul
+      .col-md-9.jumbotron
+        h1
+          =project.title
+        p
+          =project.description
+        h2 データ
+        table.table
+          th
+            each col in project.schema
+              td
+                =col

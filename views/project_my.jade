@@ -1,0 +1,13 @@
+extend layout
+block content
+    .row.jumbotron
+      h1 プロジェクト一覧
+    .row
+      - for(var i in projects)
+        .col-sm-4.col-md-4
+          .thumbnail
+            a(href='/project/edit/#{projects[i].id}')
+              h2
+                = projects[i].title
+              p
+                = projects[i].description

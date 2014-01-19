@@ -6,11 +6,11 @@ var ProjectService = require('../service/project')
 var PhotoService = require('../service/photo')
 module.exports = function (app){
   app.get('/', function *(next){
-    this.body = yield this.render('index.ejs', {role: this.role})
+    this.body = yield this.render('index.jade', {role: this.role})
     yield next
   })
   app.get('/signup', function *(next){
-    this.body = yield this.render('signup.ejs', {role: this.role})
+    this.body = yield this.render('signup.jade', {role: this.role})
     yield next
   })
   app.post('/signup', function *(next){
@@ -26,7 +26,7 @@ module.exports = function (app){
     yield next
   })
   app.get('/login', function *(next){
-    this.body = yield this.render('login.ejs', {role: this.role})
+    this.body = yield this.render('login.jade', {role: this.role})
     yield next
   })
   app.post('/login', function *(next){
@@ -53,21 +53,22 @@ module.exports = function (app){
   })
   app.get('/project', function *(next){
     var projects = yield ProjectService.fetchAll(this.pg.db.client)
-    this.body = yield this.render('projects.ejs', {role: this.role, projects: projects})
+    this.body = yield this.render('projects.jade', {role: this.role, projects: projects})
     yield next
   })
   app.get('/project/my', function *(next){
     var projects = yield ProjectService.fetchByUser(this.pg.db.client, this.session.user_id)
-    this.body = yield this.render('project_my.ejs', {role: this.role, projects: projects})
+    this.body = yield this.render('project_my.jade', {role: this.role, projects: projects})
     yield next
   })
   app.get('/project/new', function *(next){
-    this.body = yield this.render('project_new.ejs', {role: this.role})
+    this.body = yield this.render('project_new.jade', {role: this.role})
     yield next
   })
   app.get('/project/edit/:project_id', function *(next) {
     var project = yield ProjectService.fetchOne(this.pg.db.client, this.params.project_id)
-    this.body = yield this.render('project_edit.ejs', {role: this.role, project: project})
+    var photos = yield PhotoService.fetchByProject(this.pg.db.client, this.params.project_id, {limit: 10, offset: 0})
+    this.body = yield this.render('project_edit.jade', {role: this.role, project: project, photos: photos})
   })
   app.post('/project/photoupload/:project_id', function *(next) {
     var photo_id = yield PhotoService.new(this.pg.db.client, this.params.project_id)
@@ -91,7 +92,7 @@ module.exports = function (app){
   })
   app.get('/project/view/:id', function *(next){
     var project = yield ProjectService.fetchOne(this.pg.db.client, this.params.id)
-    this.body = yield this.render('project.ejs', {role: this.role, project: project})
+    this.body = yield this.render('project.jade', {role: this.role, project: project})
     yield next
   })
   app.get('/edit/:id', function *(next){

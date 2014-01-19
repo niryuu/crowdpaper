@@ -17,6 +17,7 @@
     "ejs": "*",
     "co-body": "*",
     "co-busboy": "*",
-    "path-to-regexp": "*"
+    "path-to-regexp": "*",
+    "jade": "*"
   }
 }

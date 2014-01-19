@@ -1,0 +1,16 @@
+extend layout
+block content
+    .jumbotron
+      form(role='form', action='/project/new', method='POST')
+        .form-group
+          label(for='title') プロジェクト名
+          input.form-control(type='text', name='title')
+        .form-group
+          label(for='description') 説明
+          textarea.form-control(name='description', rows='10')
+          p.help-block ライセンスなどもこちらに入力して下さい。
+        .form-group
+          label(for='cols') 入力項目
+          input.form-control(type='text', name='cols')
+          p.help-block 何を入力するかを、カンマ(,)で区切って入力して下さい。例:部局,予算,金額
+        button.btn.btn-default(type='submit') 送信

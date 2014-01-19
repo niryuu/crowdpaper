@@ -26,12 +26,15 @@ var PhotoService = function() {
     })
     return result.rows[0]
   }
-  this.fetchByProject = function *(client, project_id) {
-    var result = yield client.query_({
-      name: 'photofetchone',
-      text: 'SELECT * FROM manager.photo WHERE project_id = $1',
-      values: [project_id]
-    })
+  this.fetchByProject = function *(client, project_id, opt) {
+    opt = opt ? opt : {} 
+    opt.offset = opt.offset ? opt.offset : 0
+    var queryLimit = opt.limit ? ' LIMIT $2 OFFSET $3' : ''
+    var params = opt.limit ? [project_id, opt.limit, opt.offset] : [project_id]
+    var result = yield client.query_(
+      'SELECT * FROM manager.photo WHERE project_id = $1 ORDER BY id' + queryLimit,
+      params
+    )
     return result.rows
   }
   this.fetchAll = function *(client, opt) {
