@@ -1,1 +1,3 @@
 node_modules/*
+static/photo/*
+!static/photo/.gitkeep
