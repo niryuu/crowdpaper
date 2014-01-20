@@ -10,11 +10,11 @@ var PhotoService = function() {
       return photo_id_result.rows[0].currval
     }
   }
-  this.updateUrl = function *(client, photo_id, photo_url) {
+  this.updateUrl = function *(client, photo_id, photo_url, filename) {
     var updateResult = yield client.query_({
       name: 'updatephoto',
-      text: 'UPDATE manager.photo SET photo_url = $1 WHERE id = $2',
-      values: [photo_url, photo_id]
+      text: 'UPDATE manager.photo SET photo_url = $1, filename = $2 WHERE id = $3',
+      values: [photo_url, filename, photo_id]
     })
     return updateResult
   }

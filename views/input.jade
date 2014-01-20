@@ -1,0 +1,24 @@
+extend layout
+block content
+    .row
+      .col-md-3
+        .jumbotron
+          ul
+            li
+              a(href='/project/input/#{photo.id}') #{photo.name}
+      .col-md-9.jumbotron
+        h1
+          =project.title
+        p
+          pre
+            =project.description
+        canvas#photo
+        h2 データ
+        table.table
+          th
+            each col in project.schema
+              td
+                =col
+block append script
+  script(src='/js/underscore-min.js')
+  script(src='/js/backbone-min.js')

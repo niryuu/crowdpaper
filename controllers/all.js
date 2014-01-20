@@ -96,11 +96,13 @@ module.exports = function (app){
     this.body = yield this.render('project.jade', {role: this.role, project: project, photos: photos})
     yield next
   })
-  app.get('/edit/:id', function *(next){
-    this.body = yield this.render('edit.ejs', {role: this.role})
+  app.get('/project/input/:id', function *(next){
+    var photo = yield PhotoService.fetchOne(this.pg.db.client, this.params.id)
+    var project = yield ProjectService.fetchOne(this.pg.db.client, photo.project_id)
+    this.body = yield this.render('input.jade', {role: this.role, project: project, photo: photo})
     yield next
   })
-  app.post('/edit/:id', function *(next){
+  app.post('/project/input/:id', function *(next){
     this.body = yield this.render('edit.ejs', {role: this.role})
     yield next
   })
